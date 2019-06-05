@@ -1,0 +1,10 @@
+{
+  "extends": "airbnb-base",
+  "rules": {
+    "no-console": "off"
+  },
+  "globals": {
+    "Application": true,
+    "delay": true
+  }
+}

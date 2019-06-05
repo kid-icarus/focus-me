@@ -1,0 +1,15 @@
+{
+  "name": "timer",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "got": "9.6.0",
+    "yargs": "13.2.2"
+  },
+  "devDependencies": {
+    "eslint": "5.3.0",
+    "eslint-config-airbnb-base": "13.1.0",
+    "eslint-plugin-import": "^2.14.0"
+  }
+}
