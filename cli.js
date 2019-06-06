@@ -1,4 +1,9 @@
 const yargs = require('yargs');
+const findUp = require('find-up');
+const fs = require('fs');
+
+const configPath = findUp.sync(['.timerrc', '.timerrc.json']);
+const config = configPath ? JSON.parse(fs.readFileSync(configPath)) : {};
 
 const { argv } = yargs
   .option('time', {
@@ -15,7 +20,7 @@ const { argv } = yargs
     describe: 'Whether or not to start music when the timer is finished.',
     boolean: true,
   })
-  .option('spotify-stop', {
+  .option('spotify-pause', {
     describe: 'Whether or not to stop music when the timer is finished.',
     boolean: true,
   })
@@ -52,7 +57,7 @@ const { argv } = yargs
     boolean: true,
   })
   .demandOption(['time'], 'Please provide an amount of time for the timer')
-  .config()
+  .config(config)
   .help();
 
 module.exports = argv;

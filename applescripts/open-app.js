@@ -8,17 +8,17 @@
       height: 340,
     },
   },
+  // {
+  //   app: Application('Calendar'),
+  //   bounds: {
+  //     x: 0,
+  //     y: 659,
+  //     width: 996,
+  //     height: 541,
+  //   },
+  // },
   {
-    app: Application('Calendar'),
-    bounds: {
-      x: 0,
-      y: 659,
-      width: 996,
-      height: 541,
-    },
-  },
-  {
-    app: Application('Mail'),
+    app: Application('Microsoft Outlook'),
     bounds: {
       x: 795,
       y: 23,
