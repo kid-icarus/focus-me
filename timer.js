@@ -2,6 +2,7 @@
 const argv = require('./cli');
 const stop = require('./timer-stop');
 const start = require('./timer-start');
+const rl = require('./util/readline');
 
 const { debug } = argv;
 
@@ -15,7 +16,10 @@ process.on('SIGINT', async () => {
 });
 
 (async () => {
-  if (debug) return console.log(argv);
+  if (debug) {
+    rl.close();
+    return console.log(argv);
+  }
 
   try {
     await start();
