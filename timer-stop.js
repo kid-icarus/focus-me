@@ -1,12 +1,12 @@
 const got = require('got');
-const { webhookStop } = require('./cli');
+const { webhookStop, watchApps } = require('./cli');
 const rl = require('./util/readline');
 const { apps, procRef } = require('./applescripts/current-app-master');
 const execScript = require('./util/exec-script');
 
 const stop = async () => {
   rl.close();
-  procRef.proc.kill();
+  if (watchApps) procRef.proc.kill();
   console.log('🛑');
   Object.entries(apps).forEach(([app, time]) => {
     if (!app) return;

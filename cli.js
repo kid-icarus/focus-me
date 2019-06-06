@@ -52,6 +52,7 @@ const { argv } = yargs
     boolean: true,
   })
   .demandOption(['time'], 'Please provide an amount of time for the timer')
+  .config()
   .help();
 
 module.exports = argv;
