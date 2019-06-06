@@ -38,8 +38,8 @@ const { argv } = yargs
   })
   .option('close-apps', {
     alias: 'c',
-    description: 'Close distracting apps before the timer starts.',
-    boolean: true,
+    description: 'An array of distracting apps before the timer starts.',
+    array: true,
   })
   .option('open-apps', {
     alias: 'o',

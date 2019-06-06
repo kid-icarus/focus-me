@@ -1,5 +1,6 @@
 const { exec } = require('child_process');
 const { join } = require('path');
+const close = require('./close-app');
 
 const log = (error) => { if (error) console.error(error); };
 const script = file => join(__dirname, file);
@@ -9,7 +10,6 @@ const spotifyPause = () => exec(`osascript -l JavaScript ${script('pause-spotify
 const spotifyStart = () => exec(`osascript -l JavaScript ${script('play-spotify.js')}`, log);
 const say = words => exec(`say ${words}`, log);
 const openApps = () => exec(`osascript -l JavaScript ${script('open-app.js')}`, log);
-const closeApps = () => exec(`osascript -l JavaScript ${script('close-app.js')}`, log);
 
 module.exports = {
   alert,
@@ -17,5 +17,5 @@ module.exports = {
   spotifyStart,
   say,
   openApps,
-  closeApps,
+  close,
 };
