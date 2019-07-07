@@ -1,11 +1,26 @@
-const yargs = require('yargs');
-const findUp = require('find-up');
-const fs = require('fs');
+import * as fs from 'fs';
+import * as yargs from 'yargs';
+import * as findUp from 'find-up';
 
 const configPath = findUp.sync(['.timerrc', '.timerrc.json']);
-const config = configPath ? JSON.parse(fs.readFileSync(configPath)) : {};
+const config = configPath ? JSON.parse(fs.readFileSync(configPath, 'utf8')) : {};
 
-const { argv } = yargs
+// interface yargConfig extends yargs.Argv;
+// interface yargConfig extends yargs.Argv {
+//   time: number,
+//   t: number,
+//   alert?: boolean,
+//   a?: boolean,
+//   'spotify-start'?: boolean,
+//   'spotify-pause'?: boolean,
+//   say?: string,
+//   'webhook-start'?: string[],
+//   'webhook-stop'?: string[],
+//   'open-apps'?: string[],
+//   'close-apps'?: boolean,
+// };
+
+const argv = yargs
   .option('time', {
     alias: 't',
     describe: 'Set the time of the timer in minutes',
@@ -31,10 +46,12 @@ const { argv } = yargs
   .option('webhook-start', {
     describe: 'A URL to GET when the timer starts',
     array: true,
+    string: true
   })
   .option('webhook-stop', {
     describe: 'A URL to GET when the timer stops',
     array: true,
+    string: true
   })
   .option('debug', {
     alias: 'd',
@@ -45,6 +62,7 @@ const { argv } = yargs
     alias: 'c',
     description: 'An array of distracting apps before the timer starts.',
     array: true,
+    string: true
   })
   .option('open-apps', {
     alias: 'o',
@@ -53,11 +71,12 @@ const { argv } = yargs
   })
   .option('watch', {
     alias: 'w',
-    description: 'Keep track of focused applications while the timer is runningl',
+    description: 'Keep track of focused applications while the timer is running',
     boolean: true,
   })
   .demandOption(['time'], 'Please provide an amount of time for the timer')
   .config(config)
-  .help();
+  .help()
+  .argv;
 
-module.exports = argv;
+export default argv;

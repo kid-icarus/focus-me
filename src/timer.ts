@@ -1,8 +1,7 @@
-#!/usr/bin/env node
-const argv = require('./cli');
-const stop = require('./timer-stop');
-const start = require('./timer-start');
-const rl = require('./util/readline');
+import argv from './cli';
+import stop from './timer-stop';
+import start from './timer-start';
+import rl from './util/readline';
 
 const { debug } = argv;
 

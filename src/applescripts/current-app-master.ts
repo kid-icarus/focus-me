@@ -1,10 +1,17 @@
-const { spawn } = require('child_process');
-const { join } = require('path');
+import {ChildProcess, spawn} from 'child_process';
+import { join } from 'path';
 
-const apps = {};
-const procRef = {};
+interface Iproc {
+  proc: ChildProcess | undefined
+}
 
-const watchApps = () => {
+const procRef: Iproc = {
+  proc: undefined
+};
+
+const apps: Record<string, number> = {};
+
+const watchApps = (): ChildProcess => {
   const script = join(__dirname, 'current-app.js');
   const proc = spawn('osascript', ['-l', 'JavaScript', script]);
   procRef.proc = proc;
@@ -17,7 +24,7 @@ const watchApps = () => {
   return proc;
 };
 
-module.exports = {
+export {
   watchApps,
   apps,
   procRef,

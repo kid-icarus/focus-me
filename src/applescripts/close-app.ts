@@ -1,9 +1,9 @@
-const { exec } = require('child_process');
+import {ChildProcess, exec} from 'child_process';
 
-const closeApps = (apps = []) => {
+const closeApps = (apps: string[]): ChildProcess => {
   const appString = apps.reduce((acc, app) => acc.concat(`Application('${app}'),`), '');
   const command = `[${appString}].forEach(app => app.quit())`;
   return exec(`osascript -l JavaScript -e "${command}"`);
 };
 
-module.exports = closeApps;
+export default closeApps;
