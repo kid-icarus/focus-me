@@ -1,7 +1,14 @@
 {
-  "name": "timer",
+  "name": "",
   "version": "1.0.0",
   "main": "dist/timer.js",
+  "bin": {
+    "t": "bin/timer.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "prepublish": "yarn build"
+  },
   "license": "MIT",
   "dependencies": {
     "@types/got": "^9.6.0",

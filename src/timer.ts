@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import argv from './cli';
 import stop from './timer-stop';
 import start from './timer-start';
