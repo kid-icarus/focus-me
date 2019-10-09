@@ -66,7 +66,7 @@ const argv = yargs
   })
   .option('open-apps', {
     alias: 'o',
-    description: 'Open distracting apps before the timer starts.',
+    description: 'Open distracting apps after the timer stops.',
     boolean: true,
   })
   .option('watch', {
