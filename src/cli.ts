@@ -43,6 +43,14 @@ const argv = yargs
     alias: 's',
     describe: 'A string to announce when the timer has finished',
   })
+  .option('noisli', {
+    describe: 'Use noisli during your focus session',
+    boolean: true
+  })
+  .option('slack', {
+    describe: 'Set slack do not disturb during your session',
+    boolean: true
+  })
   .option('webhook-start', {
     describe: 'A URL to GET when the timer starts',
     array: true,

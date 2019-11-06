@@ -3,13 +3,14 @@ import {clearLine, cursorTo} from 'readline';
 import cli from './cli';
 import execScript from './util/exec-script';
 import { watchApps } from './applescripts/current-app-master';
-import { close } from './applescripts';
+import { close, slackStart } from './applescripts';
 import rl from './util/readline';
 
 const start = async () => {
   let until = cli.time * 60;
-  ['spotifyStart'].forEach(execScript);
+  ['spotifyStart', 'noisli'].forEach(execScript);
 
+  if (cli.slack) slackStart();
   if (cli['webhook-start']) {
     try {
       await Promise.all(cli['webhook-start'].map(url => got(url, { timeout: 5000 })));

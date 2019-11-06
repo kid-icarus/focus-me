@@ -3,6 +3,7 @@ import cli from './cli';
 import rl from './util/readline';
 import { apps, procRef } from './applescripts/current-app-master';
 import execScript from './util/exec-script';
+import { slackStop } from './applescripts';
 
 const stop = async () => {
   rl.close();
@@ -16,7 +17,9 @@ const stop = async () => {
     console.log(`${app} - ${mins}:${secs}`);
   });
 
-  ['alert', 'spotifyPause', 'say', 'openApps'].forEach(execScript);
+  ['alert', 'spotifyPause', 'say', 'openApps', 'noisli'].forEach(execScript);
+
+  if (cli.slack) slackStop()
 
   if (cli['webhook-stop']) {
     try {
