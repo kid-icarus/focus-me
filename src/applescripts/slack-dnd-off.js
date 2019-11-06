@@ -10,6 +10,8 @@ const script = `
 ((input) => {
   input.innerHTML = '/dnd off'
   input.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 13}))
+  input.innerHTML = '/status clear'
+  input.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 13}))
 })(document.querySelector('.ql-editor'))
 `;
 

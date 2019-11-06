@@ -10,6 +10,8 @@ const script = `
 ((input) => {
   input.innerHTML = '/dnd 25 minutes'
   input.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 13}))
+  input.innerHTML = '/status :computer: coding'
+  input.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 13}))
 })(document.querySelector('.ql-editor'))
 `;
 

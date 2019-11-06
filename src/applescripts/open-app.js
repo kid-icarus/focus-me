@@ -8,33 +8,17 @@
       height: 340,
     },
   },
-  // {
-  //   app: Application('Calendar'),
-  //   bounds: {
-  //     x: 0,
-  //     y: 659,
-  //     width: 996,
-  //     height: 541,
-  //   },
-  // },
   {
-    app: Application('Microsoft Outlook'),
+    app: Application('Calendar'),
     bounds: {
-      x: 795,
-      y: 23,
-      width: 1125,
-      height: 764,
+      x: 0,
+      y: 659,
+      width: 996,
+      height: 541,
     },
   },
   {
-    app: Application('Slack'),
-    delayTime: 6,
-    bounds: {
-      x: 0,
-      y: 23,
-      width: 965,
-      height: 635,
-    },
+    app: Application('Mail'),
   },
 ].forEach(({ app, bounds, delayTime }) => {
   app.activate();
