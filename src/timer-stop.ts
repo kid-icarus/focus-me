@@ -2,7 +2,7 @@ import * as got from 'got';
 import cli from './cli';
 import rl from './util/readline';
 import { apps, procRef } from './applescripts/current-app-master';
-import execScript from './util/exec-script';
+// import execScript from './util/exec-script';
 import {exec} from 'child_process';
 import { slackStop } from './applescripts';
 import {promises as fs} from "fs";
@@ -24,7 +24,7 @@ const stop = async (completed: boolean) => {
     return acc
   }, {});
 
-  ['alert', 'spotifyPause', 'say', 'noisli'].forEach(execScript);
+  // ['alert', 'spotifyPause', 'say', 'noisli'].forEach(execScript);
 
   if (cli.slack) slackStop()
 
@@ -37,7 +37,7 @@ const stop = async (completed: boolean) => {
   }
 
   if (completed) {
-    execScript('openApps');
+    // execScript('openApps');
     if (cli.bell) exec(`afplay -v .4 ${path.join(__dirname, '..', 'assets', 'bell.wav')}`);
     const date = new Date();
     const fileName = path.join(process.env.HOME, '.timerdb', `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}.json`)

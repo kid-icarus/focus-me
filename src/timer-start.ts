@@ -1,7 +1,7 @@
 import * as got from 'got';
 import {clearLine, cursorTo} from 'readline';
 import cli from './cli';
-import execScript from './util/exec-script';
+// import {execScript} from './util/exec-script';
 import { watchApps } from './applescripts/current-app-master';
 import { close, slackStart } from './applescripts';
 import rl from './util/readline';
@@ -10,7 +10,7 @@ import * as path from "path";
 
 const start = async () => {
   let until = cli.time * 60;
-  ['spotifyStart', 'noisli'].forEach(execScript);
+  // ['spotifyStart', 'noisli'].forEach(execScript);
 
   if (cli.slack) slackStart();
   if (cli['webhook-start']) {

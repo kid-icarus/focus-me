@@ -1,13 +1,11 @@
 import { exec } from 'child_process';
 import { join } from 'path';
-import close from './close-app';
+import close from '../plugins/application-manager/applescripts/close-app';
 
 const log = (error: Error) => { if (error) console.error(error); };
 const script = (file: string) => join(__dirname, file);
 
 const alert = () => exec('osascript -e \'display alert "Timer Finished!"\'', log);
-const spotifyPause = () => exec(`osascript -l JavaScript ${script('pause-spotify.js')}`, log);
-const spotifyStart = () => exec(`osascript -l JavaScript ${script('play-spotify.js')}`, log);
 const noisli = () => exec(`osascript -l JavaScript ${script('noisli.js')}`, log);
 const slackStart = () => exec(`osascript -l JavaScript ${script('slack-dnd-on.js')}`, log);
 const slackStop = () => exec(`osascript -l JavaScript ${script('slack-dnd-off.js')}`, log);
@@ -18,8 +16,6 @@ type Scripts = 'alert' | 'spotifyPause' | 'spotifyStart' | 'say' | 'openApps' | 
 
 export {
   alert,
-  spotifyPause,
-  spotifyStart,
   say,
   openApps,
   close,

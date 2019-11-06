@@ -1,40 +1,45 @@
 #!/usr/bin/env node
 
-import argv from './cli';
-import stop from './timer-stop';
-import start from './timer-start';
-import rl from './util/readline';
+import { Timer }  from './emitter'
+import * as fs from 'fs'
+import * as findUp from 'find-up';
+import * as path from "path";
 
-const { debug } = argv;
+const configPath = findUp.sync(['.timerrc', '.timerrc.json']);
+const config = configPath ? JSON.parse(fs.readFileSync(configPath, 'utf8')) : {};
 
-process.on('SIGINT', async () => {
+const plugins = Object.entries(config.plugins).map(([k, v]) => {
+  let plugin;
   try {
-    await stop(false);
+    plugin = require(path.join(__dirname, 'plugins', k, k))
   } catch (e) {
-    console.log('Unexpected error on sigint', e);
+
   }
-  process.exit();
+
+  if (!plugin) {
+    try {
+      plugin = require(k)
+    } catch (e) {
+      console.error(`could not load plugin ${k}`)
+      throw e
+    }
+  }
+
+  return {name: k, plugin: plugin.default}
 });
 
-(async () => {
-  if (debug) {
-    rl.close();
-    return console.log(argv);
-  }
+const timer = new Timer(config, plugins);
+timer.on('starting', () => {
+  console.log('STARTING')
+})
 
-  try {
-    await start();
-  } catch (e) {
-    console.error('Unexpected error starting timer');
-    console.error(e);
-  }
-
-  try {
-    await stop(true);
-  } catch (e2) {
-    console.error('Unexpected error stopping timer');
-    console.error(e2);
-  }
-
-  return undefined;
-})();
+timer.on('started', () => {
+  console.log('started')
+})
+timer.start()
+timer.on('tick', (until) => {
+  const mins = Math.floor(until / 60).toString().padStart(2, '0');
+  const secs = (until % 60).toString().padStart(2, '0');
+  const timeRemaining = `${mins}:${secs}`;
+  console.log(timeRemaining)
+})
