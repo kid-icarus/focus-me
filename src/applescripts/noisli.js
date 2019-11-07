@@ -5,6 +5,7 @@ function getTab(url) {
 }
 
 const tab = getTab('https://www.noisli.com');
+safari.windows[0].currentTab = tab;
 
 const script = `
   document.querySelector('[data-name="rain"]').click()
