@@ -9,7 +9,7 @@ const { debug } = argv;
 
 process.on('SIGINT', async () => {
   try {
-    await stop();
+    await stop(false);
   } catch (e) {
     console.log('Unexpected error on sigint', e);
   }
@@ -30,7 +30,7 @@ process.on('SIGINT', async () => {
   }
 
   try {
-    await stop();
+    await stop(true);
   } catch (e2) {
     console.error('Unexpected error stopping timer');
     console.error(e2);
