@@ -13,7 +13,7 @@ const stop = async (completed: boolean) => {
   console.log('🛑');
 
   const procTimes = Object.keys(apps).reduce((acc: Record<string, string>, proc) => {
-    if (!proc) acc;
+    if (!proc) return acc;
     const totalSeconds = apps[proc]
     const mins = Math.floor(totalSeconds / 60).toString().padStart(2, '0');
     const secs = (totalSeconds % 60).toString().padStart(2, '0');
@@ -23,9 +23,11 @@ const stop = async (completed: boolean) => {
     return acc
   }, {});
 
-  console.log('procTimes', procTimes);
+  ['alert', 'spotifyPause', 'say', 'noisli'].forEach(execScript);
 
-  ['alert', 'spotifyPause', 'say', 'openApps', 'noisli'].forEach(execScript);
+  if (completed) {
+    execScript('openApps');
+  }
 
   if (cli.slack) slackStop()
 
@@ -38,12 +40,21 @@ const stop = async (completed: boolean) => {
   }
 
   if (completed) {
-    let fileName = path.join(process.env.HOME, 'timerdb.json')
+    const date = new Date();
+    const fileName = path.join(process.env.HOME, '.timerdb', `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}.json`)
     let db
     try {
-      let file = await fs.readFile(fileName, 'utf8')
-      db = JSON.parse(file)
-      console.log('db', file)
+      let file = await fs.readFile(fileName, 'utf8');
+      db = JSON.parse(file);
+    } catch (e) {
+      // Just swallow, we'll create a new file
+    }
+
+    const yesterdayFile = path.join(process.env.HOME, '.timerdb', `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate() - 1}.json`)
+    let yesterdayDb
+    try {
+      let file = await fs.readFile(yesterdayFile, 'utf8');
+      yesterdayDb = JSON.parse(file);
     } catch (e) {
       // Just swallow, we'll create a new file
     }
@@ -52,7 +63,6 @@ const stop = async (completed: boolean) => {
     entries.push({
       [Date.now()]: procTimes
     });
-    console.log('entries', entries);
 
     try {
       await fs.writeFile(fileName, JSON.stringify(entries))
@@ -61,6 +71,14 @@ const stop = async (completed: boolean) => {
     }
 
     console.log(`You have completed ${entries.length} focus sessions!`);
+    if (yesterdayDb) {
+      const timesByNow = yesterdayDb.filter((time: any) => {
+        const date = new Date()
+        const timestamp = new Date(parseInt(Object.keys(time)[0], 10))
+        return timestamp.getHours() <= date.getHours() && timestamp.getMinutes() <= date.getMinutes()
+      }).length
+      console.log(`You completed ${timesByNow} by this time yesterday!`)
+    }
   }
 };
 

@@ -20,6 +20,9 @@
   {
     app: Application('Mail'),
   },
+  {
+    app: Application('Reminders'),
+  },
 ].forEach(({ app, bounds, delayTime }) => {
   app.activate();
   if (delayTime) delay(delayTime);
