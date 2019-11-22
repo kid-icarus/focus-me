@@ -5,6 +5,8 @@ import execScript from './util/exec-script';
 import { watchApps } from './applescripts/current-app-master';
 import { close, slackStart } from './applescripts';
 import rl from './util/readline';
+import {exec} from "child_process";
+import * as path from "path";
 
 const start = async () => {
   let until = cli.time * 60;
@@ -22,6 +24,7 @@ const start = async () => {
 
   if (cli.watch) watchApps();
   if (cli['close-apps']) close(cli['close-apps']);
+  if (cli.bell) exec(`afplay -v .4 ${path.join(__dirname, '..', 'assets', 'bell.wav')}`);
 
   return new Promise((res) => {
     const interval = setInterval(() => {

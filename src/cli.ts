@@ -82,6 +82,11 @@ const argv = yargs
     description: 'Keep track of focused applications while the timer is running',
     boolean: true,
   })
+  .option('bell', {
+    alias: 'b',
+    description: 'Play a bell at the end of a session',
+    boolean: true,
+  })
   .demandOption(['time'], 'Please provide an amount of time for the timer')
   .config(config)
   .help()

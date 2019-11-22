@@ -3,6 +3,7 @@ import cli from './cli';
 import rl from './util/readline';
 import { apps, procRef } from './applescripts/current-app-master';
 import execScript from './util/exec-script';
+import {exec} from 'child_process';
 import { slackStop } from './applescripts';
 import {promises as fs} from "fs";
 import * as path from 'path';
@@ -25,10 +26,6 @@ const stop = async (completed: boolean) => {
 
   ['alert', 'spotifyPause', 'say', 'noisli'].forEach(execScript);
 
-  if (completed) {
-    execScript('openApps');
-  }
-
   if (cli.slack) slackStop()
 
   if (cli['webhook-stop']) {
@@ -40,6 +37,8 @@ const stop = async (completed: boolean) => {
   }
 
   if (completed) {
+    execScript('openApps');
+    if (cli.bell) exec(`afplay -v .4 ${path.join(__dirname, '..', 'assets', 'bell.wav')}`);
     const date = new Date();
     const fileName = path.join(process.env.HOME, '.timerdb', `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}.json`)
     let db
@@ -75,7 +74,9 @@ const stop = async (completed: boolean) => {
       const timesByNow = yesterdayDb.filter((time: any) => {
         const date = new Date()
         const timestamp = new Date(parseInt(Object.keys(time)[0], 10))
-        return timestamp.getHours() <= date.getHours() && timestamp.getMinutes() <= date.getMinutes()
+        return timestamp.getHours() < date.getHours() || (
+          timestamp.getHours() === date.getHours() && timestamp.getMinutes() <= date.getMinutes()
+        )
       }).length
       console.log(`You completed ${timesByNow} by this time yesterday!`)
     }
