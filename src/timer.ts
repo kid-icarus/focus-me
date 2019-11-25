@@ -8,24 +8,26 @@ import * as path from "path";
 const configPath = findUp.sync(['.timerrc', '.timerrc.json']);
 const config = configPath ? JSON.parse(fs.readFileSync(configPath, 'utf8')) : {};
 
-const plugins = Object.entries(config.plugins).map(([k, v]) => {
+const plugins = Object.entries(config.plugins).map(([pluginName, pluginConfig]) => {
   let plugin;
+  console.log(pluginName)
+  console.log(pluginConfig)
   try {
-    plugin = require(path.join(__dirname, 'plugins', k, k))
+    plugin = require(path.join(__dirname, 'plugins', pluginName, pluginName))
   } catch (e) {
 
   }
 
   if (!plugin) {
     try {
-      plugin = require(k)
+      plugin = require(pluginName)
     } catch (e) {
-      console.error(`could not load plugin ${k}`)
+      console.error(`could not load plugin ${pluginName}`)
       throw e
     }
   }
 
-  return {name: k, plugin: plugin.default}
+  return {name: pluginName, plugin: plugin.default, config: pluginConfig}
 });
 
 const timer = new Timer(config, plugins);
@@ -36,10 +38,15 @@ timer.on('starting', () => {
 timer.on('started', () => {
   console.log('started')
 })
-timer.start()
-timer.on('tick', (until) => {
-  const mins = Math.floor(until / 60).toString().padStart(2, '0');
-  const secs = (until % 60).toString().padStart(2, '0');
-  const timeRemaining = `${mins}:${secs}`;
-  console.log(timeRemaining)
+timer.on('stopping', () => {
+  console.log('congrats! stopping!')
 })
+process.on('SIGINT', () => {
+  timer.stop(false)
+});
+timer.on('stopped', () => {
+  console.log('stopped')
+  process.exit();
+})
+timer.start()
+

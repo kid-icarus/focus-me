@@ -5,20 +5,18 @@ import closeApps from "./applescripts/close-app";
 
 const plugin: Plugin = {
     async start(config: any): Promise<void> {
-        if (!config.enabled) return;
+        return closeApps(config.apps)
+    },
 
+    async stop(config: any, completed: boolean): Promise<void> {
+        if (!completed) return;
         const p = new Promise<void>((res, rej) => {
-            const proc = exec(`osascript -l JavaScript ${script('application-manager', 'open-app')}`, (err) => {
+            const proc = exec(`osascript -l JavaScript ${script('application-manager', 'open-app.js')}`, (err) => {
                 if (err) return rej(err)
                 res()
             })
         })
-
         return p.catch((err) => console.log(err))
-    },
-    async stop(config: any, completed: boolean): Promise<void> {
-        if (!config.enabled) return;
-        return closeApps(config.apps)
     }
 }
 
