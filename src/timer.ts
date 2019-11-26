@@ -10,8 +10,6 @@ const config = configPath ? JSON.parse(fs.readFileSync(configPath, 'utf8')) : {}
 
 const plugins = Object.entries(config.plugins).map(([pluginName, pluginConfig]) => {
   let plugin;
-  console.log(pluginName)
-  console.log(pluginConfig)
   try {
     plugin = require(path.join(__dirname, 'plugins', pluginName, pluginName))
   } catch (e) {
@@ -31,22 +29,15 @@ const plugins = Object.entries(config.plugins).map(([pluginName, pluginConfig]) 
 });
 
 const timer = new Timer(config, plugins);
-timer.on('starting', () => {
-  console.log('STARTING')
-})
 
-timer.on('started', () => {
-  console.log('started')
-})
-timer.on('stopping', () => {
-  console.log('congrats! stopping!')
-})
 process.on('SIGINT', () => {
   timer.stop(false)
 });
+
 timer.on('stopped', () => {
   console.log('stopped')
   process.exit();
 })
+
 timer.start()
 

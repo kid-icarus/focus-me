@@ -12,7 +12,7 @@ const procRef: Iproc = {
 const apps: Record<string, number> = {};
 
 const watchApps = (): ChildProcess => {
-  const script = join(__dirname, 'current-app.js');
+  const script = join(__dirname, 'applescripts', 'current-app.js');
   const proc = spawn('osascript', ['-l', 'JavaScript', script]);
   procRef.proc = proc;
 
