@@ -29,7 +29,6 @@ class Timer extends EventEmitter {
   }
 
   async start() {
-    console.log(this.plugins)
     this.emit('starting')
     const promises = this.plugins.map(
         ({name, plugin, config}) => plugin.start(config).catch(e => {
