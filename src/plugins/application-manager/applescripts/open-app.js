@@ -26,5 +26,6 @@
 ].forEach(({ app, bounds, delayTime }) => {
   app.activate();
   if (delayTime) delay(delayTime);
+  // eslint-disable-next-line no-param-reassign
   if (bounds) app.windows[0].bounds = bounds;
 });

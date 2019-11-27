@@ -6,7 +6,6 @@ const rl = readline.createInterface({
 });
 
 import {Plugin} from "../../emitter";
-import {clearLine, cursorTo} from "readline";
 
 const plugin: Plugin = {
     async start(config: any) {
@@ -17,8 +16,7 @@ const plugin: Plugin = {
         const mins = Math.floor(until / 60).toString().padStart(2, '0');
         const secs = (until % 60).toString().padStart(2, '0');
         const timeRemaining = `${mins}:${secs}`;
-        clearLine(process.stdout, 0);
-        cursorTo(process.stdout, 0);
+        rl.write(null, { ctrl: true, name: 'u' });
         rl.write(timeRemaining);
     }
 }
