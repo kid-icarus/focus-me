@@ -1,6 +1,8 @@
 {
   "compilerOptions": {
     "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "strict": true,
     "outDir": "dist",
     "module": "commonjs",
     "target": "es2018",

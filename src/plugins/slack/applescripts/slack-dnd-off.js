@@ -15,7 +15,4 @@ const script = `
 })(document.querySelector('.ql-editor'))
 `;
 
-safari.doJavaScript(
-  script,
-  { in: tab },
-);
+safari.doJavaScript(script, { in: tab });

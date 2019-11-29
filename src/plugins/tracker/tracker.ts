@@ -1,71 +1,71 @@
-import {Plugin} from "../../emitter";
-import * as path from 'path';
-import * as f from 'fs'
-import {procRef, watchApps, apps} from "./current-app-master";
-const fs = f.promises;
+import { Plugin } from '../../util/load-plugins';
+import { procRef, watchApps, apps } from './current-app-master';
+import { readDb, writeDb } from './db';
+import { compareTimesFromYesterday } from './compare-times-from-yesterday';
+
+export type TrackerDb = Record<string, Record<string, string>>[];
+
+const formatApplicationFocusDuration = (
+  acc: Record<string, string>,
+  proc: [string, number],
+) => {
+  const [applicationName, secondsFocused] = proc;
+  // Sometimes the OS reports an empty string as the process name.
+  if (!applicationName) return acc;
+
+  const mins = Math.floor(secondsFocused / 60)
+    .toString()
+    .padStart(2, '0');
+  const secs = (secondsFocused % 60).toString().padStart(2, '0');
+  const duration = `${mins}:${secs}`;
+  console.log(`${proc} - ${duration}`);
+  acc[applicationName] = duration;
+  return acc;
+};
 
 const plugin: Plugin = {
-  async start(config: any): Promise<void> {
+  async start(): Promise<void> {
     watchApps();
   },
   async stop(config: any, completed: boolean): Promise<void> {
-    procRef.proc.kill();
+    if (procRef.proc) {
+      procRef.proc.kill();
+    }
     if (!completed) return;
 
-    const procTimes = Object.keys(apps).reduce((acc: Record<string, string>, proc) => {
-      if (!proc) return acc;
-      const totalSeconds = apps[proc]
-      const mins = Math.floor(totalSeconds / 60).toString().padStart(2, '0');
-      const secs = (totalSeconds % 60).toString().padStart(2, '0');
-      const duration = `${mins}:${secs}`
-      console.log(`${proc} - ${duration}`);
-      acc[proc] = duration
-      return acc
-    }, {});
+    const focusedApplications = Object.entries(apps).reduce(
+      formatApplicationFocusDuration,
+      {},
+    );
 
-    const date = new Date();
-    const fileName = path.join(process.env.HOME, '.timerdb', `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}.json`)
-    let db
+    const today = new Date();
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+
+    let todayDb, yesterdayDb;
     try {
-      let file = await fs.readFile(fileName, 'utf8');
-      db = JSON.parse(file);
+      todayDb = await readDb(today);
+      yesterdayDb = await readDb(yesterday);
     } catch (e) {
-      // Just swallow, we'll create a new file
+      // Just swallow if not found, we'll overwrite.
     }
 
-    const yesterdayFile = path.join(process.env.HOME, '.timerdb', `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate() - 1}.json`)
-    let yesterdayDb
-    try {
-      let file = await fs.readFile(yesterdayFile, 'utf8');
-      yesterdayDb = JSON.parse(file);
-    } catch (e) {
-      // Just swallow, we'll create a new file
-    }
-
-    let entries = db || [];
+    const entries = todayDb || [];
     entries.push({
-      [Date.now()]: procTimes
+      [Date.now()]: focusedApplications,
     });
-
-    try {
-      await fs.writeFile(fileName, JSON.stringify(entries))
-    } catch (e) {
-      console.error('could not write!')
-    }
+    await writeDb(today, entries);
 
     console.log(`You have completed ${entries.length} focus sessions!`);
+
     if (yesterdayDb) {
-      const timesByNow = yesterdayDb.filter((time: any) => {
-        const date = new Date()
-        const timestamp = new Date(parseInt(Object.keys(time)[0], 10))
-        return timestamp.getHours() < date.getHours() || (
-          timestamp.getHours() === date.getHours() && timestamp.getMinutes() <= date.getMinutes()
-        )
-      }).length
-      console.log(`You completed ${timesByNow} by this time yesterday!`)
+      console.log(
+        `You completed ${compareTimesFromYesterday(
+          yesterdayDb,
+        )} by now yesterday.`,
+      );
     }
-  }
-}
+  },
+};
 
-export default plugin
-
+export default plugin;

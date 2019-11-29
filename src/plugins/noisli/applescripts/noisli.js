@@ -11,7 +11,4 @@ const script = `
   document.querySelector('[data-name="rain"]').click()
 `;
 
-safari.doJavaScript(
-  script,
-  { in: tab },
-);
+safari.doJavaScript(script, { in: tab });

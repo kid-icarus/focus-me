@@ -1,14 +1,20 @@
-import {exec} from "child_process";
-import {Plugin} from "../../emitter";
-import {log, script} from '../../util/exec-script'
+import { exec } from 'child_process';
+import { Plugin } from '../../util/load-plugins';
+import { log, script } from '../../util/exec-script';
 
 const plugin: Plugin = {
-    async start(config: any) {
-        exec(`osascript -l JavaScript ${script('spotify', 'play-spotify.js')}`, log)
-    },
-    async stop(config: any, completed: boolean) {
-        exec(`osascript -l JavaScript ${script('spotify', 'pause-spotify.js')}`, log);
-    }
-}
+  async start() {
+    exec(
+      `osascript -l JavaScript ${script('spotify', 'play-spotify.js')}`,
+      log,
+    );
+  },
+  async stop() {
+    exec(
+      `osascript -l JavaScript ${script('spotify', 'pause-spotify.js')}`,
+      log,
+    );
+  },
+};
 
-export default plugin
+export default plugin;
