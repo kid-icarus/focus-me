@@ -21,6 +21,9 @@
     app: Application('Mail'),
   },
   {
+    app: Application('Jira'),
+  },
+  {
     app: Application('Reminders'),
   },
 ].forEach(({ app, bounds, delayTime }) => {
