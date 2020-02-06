@@ -18,7 +18,7 @@ const formatApplicationFocusDuration = (
     .padStart(2, '0');
   const secs = (secondsFocused % 60).toString().padStart(2, '0');
   const duration = `${mins}:${secs}`;
-  console.log(`${proc} - ${duration}`);
+  console.log(`${applicationName} - ${duration}`);
   acc[applicationName] = duration;
   return acc;
 };
