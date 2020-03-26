@@ -1,9 +1,10 @@
 {
-  "name": "",
+  "name": "focus-me",
   "version": "1.0.0",
+  "author": "Ryan Kois",
   "main": "dist/index.js",
   "bin": {
-    "t": "bin/timer.js"
+    "focus": "bin/timer.js"
   },
   "scripts": {
     "lint": "eslint --ext=.js,.ts src/",
