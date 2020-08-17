@@ -1,65 +1,49 @@
 # Focus Me
 
-A configurable CLI-based timer with a helpful plugin system. The following
+A configurable CLI-based timer with a plugin system meant to automate various tasks when the timer starts, stops, or ticks. The following
 plugins are included:
 
-- `applciation-manager` Closes distracting applications before the timer starts,
+- [applciation-manager](src/plugins/application-manager/README.md) - Closes distracting applications before the timer starts,
   and opens them back up when the timer ends.
-- `bell` Plays a nice sounding bell at the start and end of the timer.
-- `logger` Logs the time remaining to the terminal.
-- `noisli` Toggles white noise from `https://www.noisli.com/`
-- `rain` Plays the sound of rain during the duration of the timer
-- `slack` Toggles do not disturb and sets a status for the duration of the timer
-- `tracker` Tracks the number of sessions completed per day, along with the
+- [bell](src/plugins/bell/README.md) - Plays a nice sounding bell at the start and end of the timer.
+- [logger](src/plugins/logger/README.md) - Logs the time remaining to the terminal.
+- [rain](src/plugins/rain/README.md) Plays the sound of rain during the duration of the timer
+- [slack](src/plugins/slack/README.md) Toggles do not disturb and sets a status for the duration of the timer
+- [spotify](src/plugins/spotify/README.md) Plays spotify during the timer, stops it when the timer ends.
+- [tracker](src/plugins/tracker/README.md) Tracks the number of sessions completed per day, along with the
   focused applications in use for the duration of the timer.
-- `webhook` Fire configurable HTTP requests when the timer starts and stops.
+- [webhooks](src/plugins/webhooks/README.md) Fire configurable HTTP requests when the timer starts and stops.
 
 ## Installation
 
 `npm install -g focus-me`
 
-## Usage
-
-`focus` will start the timer.
-
-If you need to cancel the timer, you can kill the process. Cancelling the timer
-will not execute any plugins that should only be run upon _completion_ of the
-timer.
-
 ## Configuration
 
-Timer will look in `~/.timerrc.json` to try to load configuration.
+`focus` will look in `~/.timerrc.json` to try to load configuation, and if cannot find it, it will supply a default.
 
-### Sample configuration:
+- `config.time` - The amount of time, in mintues, to count down.
+- `config.plugins` - An object of plugins to configure. Each key is the name of the plugin. Each plugin has an `enabled` property to enabled/disabled it, as well as other plugin-specific configuration.
 
 ```json
 {
   "time": 25,
   "plugins": {
-    "application-manager": {
-      "enabled": true,
-      "apps": ["Mail", "Calendar", "Messages", "Jira"]
-    },
-    "rain": {
-      "enabled": false,
-      "volume": ".8"
-    },
-    "slack": {
-      "enabled": true,
-      "browser": "chrome"
-    },
-    "logger": {
-      "enabled": true
-    },
-    "bell": {
-      "enabled": true
-    },
-    "spotify": {
-      "enabled": true
-    },
-    "tracker": {
+    "name-of-plugin": {
       "enabled": true
     }
   }
 }
 ```
+
+## Usage
+
+`focus` will start the timer.
+
+If you need to cancel the timer, you can kill the process with a `SIGINT`. Cancelling the timer
+will not execute any plugins' stop methods that should only be run upon _completion_ of the
+timer.
+
+## Creating your own plugin
+
+

@@ -15,7 +15,7 @@ const init = async (): Promise<void> => {
     process.exit();
   });
 
-  timer.start();
+  await timer.start();
 };
 
-init();
+(async (): Promise<void> => await init())();

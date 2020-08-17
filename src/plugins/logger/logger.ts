@@ -8,8 +8,12 @@ const rl = readline.createInterface({
 import { Plugin } from '../../util/load-plugins';
 
 const plugin: Plugin = {
-  async start(config: any) {},
-  async stop(config: any, completed: boolean) {},
+  async start() {
+    return undefined;
+  },
+  async stop() {
+    return undefined;
+  },
   async tick(config: any, until: number) {
     const mins = Math.floor(until / 60)
       .toString()

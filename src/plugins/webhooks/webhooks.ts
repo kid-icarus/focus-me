@@ -1,15 +1,28 @@
-import * as got from 'got';
+import got from 'got';
 import { Plugin } from '../../util/load-plugins';
 
+interface GotParams {
+  url: string;
+  options: any;
+}
+
+interface WebhooksConfig {
+  enabled: string;
+  startHooks: GotParams[];
+  stopHooks: GotParams[];
+}
+
 const plugin: Plugin = {
-  async start(config: any): Promise<void> {
+  async start(config: WebhooksConfig): Promise<void> {
     await Promise.all(
-      config.startHooks.map((url: string) => got(url, { timeout: 5000 })),
+      config.startHooks.map(({ url, options }) => {
+        return got(url, options);
+      }),
     );
   },
-  async stop(config: any, completed: boolean): Promise<void> {
+  async stop(config: WebhooksConfig, completed: boolean): Promise<void> {
     await Promise.all(
-      config.stopHooks.map((url: string) => got(url, { timeout: 5000 })),
+      config.stopHooks.map(({ url, options }) => got(url, options)),
     );
   },
 };

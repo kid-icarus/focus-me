@@ -1,17 +1,29 @@
-import { exec } from 'child_process';
 import { Plugin } from '../../util/load-plugins';
+import { exec } from 'child_process';
 import { script } from '../../util/exec-script';
-import closeApps from './applescripts/close-app';
 
 const plugin: Plugin = {
-  async start(config: any): Promise<void> {
-    return closeApps(config.apps);
+  async start(): Promise<void> {
+    return new Promise<void>((res, rej) => {
+      exec(
+        `osascript -l JavaScript ${script(
+          'application-manager',
+          'close-app.js',
+        )}`,
+        (err, stdout, stderr) => {
+          console.log(stderr);
+          console.log(stdout);
+          if (err) return rej(err);
+          res();
+        },
+      );
+    });
   },
 
   async stop(config: any, completed: boolean): Promise<void> {
     if (!completed) return;
     const p = new Promise<void>((res, rej) => {
-      const proc = exec(
+      exec(
         `osascript -l JavaScript ${script(
           'application-manager',
           'open-app.js',

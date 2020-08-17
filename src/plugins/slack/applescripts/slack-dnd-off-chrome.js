@@ -26,5 +26,5 @@ const javascript = `
 `;
 
 tab.execute({
-  javascript
+  javascript,
 });

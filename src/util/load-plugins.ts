@@ -20,7 +20,9 @@ export interface PluginConfig {
 export const loadPlugins = (config: TimerConfig): PluginWrapper[] => {
   if (!config.plugins) return [];
 
-  return Object.entries(config.plugins).map(([pluginName, pluginConfig]) => {
+  const { plugins } = config;
+
+  return Object.entries(plugins).map(([pluginName, pluginConfig]) => {
     let plugin;
     try {
       plugin = require(path.join(

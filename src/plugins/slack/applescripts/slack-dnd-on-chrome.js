@@ -1,4 +1,8 @@
+const util = Library('focus-me-applescripts/util');
+const config = util.getConfig();
 const chrome = Application('Google Chrome');
+const { time } = config;
+const { statusEmoji, statusMessage } = config.plugins.slack;
 
 function getTab(url) {
   const windows = chrome.windows;
@@ -18,13 +22,13 @@ const tab = getTab('https://app.slack.com');
 
 const javascript = `
 ((input) => {
-  input.innerHTML = '/dnd 25 minutes'
+  input.innerHTML = '/dnd ${time} minutes'
   input.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 13}))
-  input.innerHTML = '/status :computer: coding'
+  input.innerHTML = '/status ${statusEmoji} ${statusMessage}'
   input.dispatchEvent(new KeyboardEvent('keydown', {keyCode: 13}))
 })(document.querySelector('.ql-editor'))
 `;
 
 tab.execute({
-  javascript
+  javascript,
 });
