@@ -17,7 +17,7 @@ const plugin: Plugin = {
     await startFocustime(config.apiKey, config.duration);
   },
   async stop(config: RescueTimeConfig, completed: boolean): Promise<void> {
-    await endFocustime(config.apiKey);
+    if (!completed) await endFocustime(config.apiKey);
   },
 };
 
