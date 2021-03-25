@@ -3,7 +3,10 @@
 Slack can be quite distracting when you are trying to focus, yet it can be considered rude to just log off during working hours.
 We need to at least indicate that we are online but busy being focused.
 
-Unfortunately the Slack desktop app doesn't have much in terms of Applescript integration as it's an Electron app. In order to use this plugin you must use slack in the browser, either Chrome or Safari will do.
+To use this you need your API token handy. You can find it by navigating to the `/customize` page:
+
+`window.TS.boot_data.api_token` should contain the token.
+
 
 ## config
 
@@ -12,8 +15,8 @@ Unfortunately the Slack desktop app doesn't have much in terms of Applescript in
   "plugins": {
     "slack": {
       "enabled": true,
-      "browser": "chrome",
-      "statusMessage": "coding",
+      "token": "xx-asdfasdfasdf",
+      "statusText": "coding",
       "statusEmoji": ":computer:"
     }
   }
@@ -24,14 +27,14 @@ Unfortunately the Slack desktop app doesn't have much in terms of Applescript in
 
 Whether or not the plugin is enabled.
 
-## browser
-
-Either `chrome` or `safari`. This will search for a slack tab to automate in the selected browser.
-
-## statusMessage
-
-The message to set while you are focusing.
-
 ## statusEmoji
 
 The emoji to set as your status while you are focusing.
+
+## statusText
+
+The text to set as your status while you are focusing.
+
+## duration
+
+The duration of the session in minutes
