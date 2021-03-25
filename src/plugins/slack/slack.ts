@@ -1,56 +1,26 @@
-import { exec } from 'child_process';
 import { Plugin } from '../../util/load-plugins';
-import { log, script } from '../../util/exec-script';
+import { clearStatus, setDndOff, setDndOn, setStatus } from './api';
 
 const plugin: Plugin = {
   async start(config: any) {
-    switch (config.browser) {
-      case 'chrome':
-        exec(
-          `osascript -l JavaScript ${script(
-            'slack',
-            'slack-dnd-on-chrome.js',
-          )}`,
-          log,
-        );
-        return;
-      case 'safari':
-        exec(
-          `osascript -l JavaScript ${script('slack', 'slack-dnd-on.js')}`,
-          log,
-        );
-        return;
-      default:
-        exec(
-          `osascript -l JavaScript ${script('slack', 'slack-dnd-on.js')}`,
-          log,
-        );
-        return;
-    }
+    const result = await Promise.all([
+      setDndOn(config.token, config.duration),
+      setStatus(config.token, {
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        status_text: config.statusText,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        status_emoji: config.statusEmoji,
+      }),
+    ]);
+    result.forEach(r => console.log(r.body));
   },
   async stop(config: any, completed: boolean) {
-    switch (config.browser) {
-      case 'chrome':
-        exec(
-          `osascript -l JavaScript ${script(
-            'slack',
-            'slack-dnd-off-chrome.js',
-          )}`,
-          log,
-        );
-        return;
-      case 'safari':
-        exec(
-          `osascript -l JavaScript ${script('slack', 'slack-dnd-off.js')}`,
-          log,
-        );
-        return;
-      default:
-        exec(
-          `osascript -l JavaScript ${script('slack', 'slack-dnd-off.js')}`,
-          log,
-        );
-        return;
+    if (!completed) {
+      const result = await Promise.all([
+        setDndOff(config.token),
+        clearStatus(config.token),
+      ]);
+      result.forEach(r => console.log(r.body));
     }
   },
 };
