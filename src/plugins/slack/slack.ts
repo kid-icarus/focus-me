@@ -3,7 +3,7 @@ import { clearStatus, setDndOff, setDndOn, setStatus } from './api';
 
 const plugin: Plugin = {
   async start(config: any) {
-    const result = await Promise.all([
+    await Promise.all([
       setDndOn(config.token, config.duration),
       setStatus(config.token, {
         // eslint-disable-next-line @typescript-eslint/camelcase
@@ -14,12 +14,7 @@ const plugin: Plugin = {
     ]);
   },
   async stop(config: any, completed: boolean) {
-    if (!completed) {
-      const result = await Promise.all([
-        setDndOff(config.token),
-        clearStatus(config.token),
-      ]);
-    }
+    await Promise.all([setDndOff(config.token), clearStatus(config.token)]);
   },
 };
 
