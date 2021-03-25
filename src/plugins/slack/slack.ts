@@ -12,7 +12,6 @@ const plugin: Plugin = {
         status_emoji: config.statusEmoji,
       }),
     ]);
-    result.forEach(r => console.log(r.body));
   },
   async stop(config: any, completed: boolean) {
     if (!completed) {
@@ -20,7 +19,6 @@ const plugin: Plugin = {
         setDndOff(config.token),
         clearStatus(config.token),
       ]);
-      result.forEach(r => console.log(r.body));
     }
   },
 };
