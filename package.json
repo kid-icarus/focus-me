@@ -1,7 +1,7 @@
 {
-  "name": "focus-me",
+  "name": "@kid-icarus/focus-me",
   "version": "1.0.0",
-  "author": "Ryan Kois",
+  "author": "Ryan Kois <ryan.kois@gmail.com>",
   "main": "dist/index.js",
   "bin": {
     "focus": "bin/timer.js"
