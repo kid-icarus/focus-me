@@ -17,7 +17,7 @@
     "watch": "tsc -w",
     "compile-applescripts": "osacompile -o ./dist/util/focus-me-applescripts/util.scpt -l JavaScript ./dist/util/focus-me-applescripts/util.js",
     "prepublish": "yarn build",
-    "postinstall": "npm run compile-applescripts && node install.js"
+    "postinstall": "if [ -z \"$CI\" ]; then npm run compile-applescripts && node install.js; fi "
   },
   "license": "MIT",
   "dependencies": {
