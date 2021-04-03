@@ -1,15 +1,13 @@
 {
   "name": "@focus-me/focus-cli",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "author": "Ryan Kois <ryan.kois@gmail.com>",
   "repository": {
     "type": "git",
     "url": "https://github.com/kid-icarus/focus-me.git"
   },
   "main": "dist/index.js",
-  "bin": {
-    "focus": "bin/focus"
-  },
+  "bin": "./bin/focus",
   "scripts": {
     "lint": "eslint --ext=.js,.ts src/ && prettier -l **/*.md",
     "lint:fix": "eslint --fix --ext=.js,.ts src/ && prettier --write **/*.md",
