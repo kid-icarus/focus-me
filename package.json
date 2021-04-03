@@ -2,6 +2,10 @@
   "name": "@kid-icarus/focus-me",
   "version": "1.0.0",
   "author": "Ryan Kois <ryan.kois@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kid-icarus/focus-me.git"
+  },
   "main": "dist/index.js",
   "bin": {
     "focus": "bin/timer.js"
