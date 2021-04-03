@@ -1,6 +1,6 @@
 {
   "name": "@focus-me/focus-cli",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "author": "Ryan Kois <ryan.kois@gmail.com>",
   "repository": {
     "type": "git",
@@ -13,7 +13,7 @@
     "lint:fix": "eslint --fix --ext=.js,.ts src/ && prettier --write **/*.md",
     "build": "tsc",
     "watch": "tsc -w",
-    "compile-applescripts": "osacompile -o ./node_modules/@focus-me/focus-cli/dist/util/focus-me-applescripts/util.scpt -l JavaScript ./node_modules/@focus-me/focus-cli/dist/util/focus-me-applescripts/util.js",
+    "compile-applescripts": "osacompile -o ./dist/util/focus-me-applescripts/util.scpt -l JavaScript ./dist/util/focus-me-applescripts/util.js",
     "prepublish": "yarn build",
     "postinstall": "if [ -z \"$CI\" ]; then npm run compile-applescripts && node install.js; fi "
   },
