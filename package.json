@@ -1,6 +1,6 @@
 {
   "name": "@focus-me/focus-cli",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "author": "Ryan Kois <ryan.kois@gmail.com>",
   "repository": {
     "type": "git",
@@ -19,7 +19,8 @@
   },
   "files": [
     "dist",
-    "assets"
+    "assets",
+    "bin"
   ],
   "license": "MIT",
   "dependencies": {
