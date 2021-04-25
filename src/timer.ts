@@ -23,6 +23,10 @@ class Timer extends EventEmitter {
     return this.state;
   }
 
+  getUntil(): number {
+    return this.until;
+  }
+
   async start(): Promise<void> {
     this.emit('starting');
     const promises = this.plugins.map(({ name, plugin, config }) =>
