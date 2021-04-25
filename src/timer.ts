@@ -82,6 +82,7 @@ export class Timer extends EventEmitter {
     try {
       await Promise.all(promises);
     } catch (e) {}
+    if (this.intervalId) clearInterval(this.intervalId);
     this.emit('stopped');
     this.state = 'STOPPED';
   }
