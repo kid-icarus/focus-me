@@ -4,7 +4,15 @@ import { PluginWrapper } from './util/load-plugins';
 
 type TimerState = 'STARTED' | 'STOPPED';
 
-class Timer extends EventEmitter {
+export declare interface Timer {
+  on(event: 'starting', listener: () => void): this;
+  on(event: 'started', listener: () => void): this;
+  on(event: 'tick', listener: (until: number) => void): this;
+  on(event: 'stopping', listener: () => void): this;
+  on(event: 'stopped', listener: () => void): this;
+}
+
+export class Timer extends EventEmitter {
   private plugins: PluginWrapper[];
   private config: Record<string, any>;
   private intervalId: NodeJS.Timeout | undefined;
@@ -78,5 +86,3 @@ class Timer extends EventEmitter {
     this.state = 'STOPPED';
   }
 }
-
-export { Timer };
