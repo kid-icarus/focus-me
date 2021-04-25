@@ -2,17 +2,25 @@ import { EventEmitter } from 'events';
 import { setInterval, clearInterval } from 'timers';
 import { PluginWrapper } from './util/load-plugins';
 
+type TimerState = 'STARTED' | 'STOPPED';
+
 class Timer extends EventEmitter {
   private plugins: PluginWrapper[];
   private config: Record<string, any>;
   private intervalId: NodeJS.Timeout | undefined;
   private until: number;
+  private state: TimerState;
 
   constructor(config: Record<string, any>, plugins: PluginWrapper[]) {
     super();
     this.config = config;
     this.plugins = plugins.filter(({ config }) => config.enabled);
     this.until = config.time * 60;
+    this.state = 'STOPPED';
+  }
+
+  getState() {
+    return this.state;
   }
 
   async start(): Promise<void> {
@@ -26,6 +34,7 @@ class Timer extends EventEmitter {
       await Promise.all(promises);
     } catch (e) {}
     this.emit('started');
+    this.state = 'STARTED';
 
     this.intervalId = setInterval(async () => {
       this.until -= 1;
@@ -62,6 +71,7 @@ class Timer extends EventEmitter {
       await Promise.all(promises);
     } catch (e) {}
     this.emit('stopped');
+    this.state = 'STOPPED';
   }
 }
 
