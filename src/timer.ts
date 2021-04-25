@@ -19,7 +19,7 @@ class Timer extends EventEmitter {
     this.state = 'STOPPED';
   }
 
-  getState() {
+  getState(): TimerState {
     return this.state;
   }
 
