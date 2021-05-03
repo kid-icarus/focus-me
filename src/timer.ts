@@ -5,8 +5,8 @@ import { PluginWrapper } from './util/load-plugins';
 type TimerState = 'STARTED' | 'STOPPED';
 
 export declare interface Timer {
-  on(event: 'starting', listener: () => void): this;
-  on(event: 'started', listener: () => void): this;
+  on(event: 'starting', listener: (until: number) => void): this;
+  on(event: 'started', listener: (until: number) => void): this;
   on(event: 'tick', listener: (until: number) => void): this;
   on(event: 'stopping', listener: () => void): this;
   on(event: 'stopped', listener: () => void): this;
@@ -36,7 +36,7 @@ export class Timer extends EventEmitter {
   }
 
   async start(): Promise<void> {
-    this.emit('starting');
+    this.emit('starting', this.until);
     const promises = this.plugins.map(({ name, plugin, config }) =>
       plugin.start(config).catch(e => {
         console.error(`error starting ${name} plugin: ${e}`);
@@ -45,7 +45,7 @@ export class Timer extends EventEmitter {
     try {
       await Promise.all(promises);
     } catch (e) {}
-    this.emit('started');
+    this.emit('started', this.until);
     this.state = 'STARTED';
 
     this.intervalId = setInterval(async () => {
