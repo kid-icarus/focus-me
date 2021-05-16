@@ -25,7 +25,7 @@ included:
 
 ## Installation
 
-`npm install -g focus-me`
+`npm install -g @focus-me/focus-cli`
 
 ## Configuration
 
