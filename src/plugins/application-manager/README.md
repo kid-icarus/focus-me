@@ -18,7 +18,11 @@ This plugin manages applications before the timer starts, and once it ends.
           "name": "Messages"
         }
       ],
-      "close": ["Mail", "Messages", "Calendar"]
+      "close": [{
+        "name": "Mail"
+      }, {
+        "name": "Messages"
+      }]
     }
   }
 }
