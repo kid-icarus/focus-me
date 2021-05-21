@@ -1,0 +1,14 @@
+{
+  "type": "sqlite",
+  "synchronize": true,
+  "logging": false,
+  "entities": [
+    "src/plugins/tracker/entity/**/*.ts"
+  ],
+  "migrations": [
+    "src/plugins/tracker/migration/**/*.ts"
+  ],
+  "subscribers": [
+    "src/plugins/tracker/subscriber/**/*.ts"
+  ]
+}

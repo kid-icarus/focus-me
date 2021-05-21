@@ -6,6 +6,9 @@ config.plugins['application-manager'].close.forEach(({ name }) => {
   try {
     if (app && app.running()) app.quit();
   } catch (e) {
+    const realName = app.name();
+    const displayedName = app.displayedName();
+    const id = app.id();
     // Sometimes some MailQuickLookExtension process makes Mail falsely report itself as running.
     console.log(`Could not close ${name}: `, e);
   }

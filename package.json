@@ -31,6 +31,9 @@
     "find-up": "4.0.0",
     "got": "^11.5.2",
     "joi": "^17.2.0",
+    "reflect-metadata": "^0.1.13",
+    "sqlite3": "^5.0.2",
+    "typeorm": "^0.2.32",
     "typescript": "^3.9.7",
     "yargs": "13.2.2"
   },

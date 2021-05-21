@@ -1,7 +1,9 @@
 import { Plugin } from '../../util/load-plugins';
-import { procRef, watchApps, apps } from './current-app-master';
-import { readDb, writeDb } from './db';
-import { compareTimesFromYesterday } from './compare-times-from-yesterday';
+import { procRef, watchApps } from './current-app-master';
+
+import 'reflect-metadata';
+import { Connection, createConnection } from 'typeorm';
+import { Session } from './entity/Session';
 
 export type TrackerDb = Record<string, Record<string, string>>[];
 
@@ -23,47 +25,39 @@ const formatApplicationFocusDuration = (
   return acc;
 };
 
+let session: Session;
+
 const plugin: Plugin = {
   async start(): Promise<void> {
+    session = new Session();
+    session.startTime = Date.now();
+    session.completed = false;
     watchApps();
   },
   async stop(config: any, completed: boolean): Promise<void> {
+    let connection: Connection;
+    try {
+      connection = await createConnection({
+        type: 'sqlite',
+        database: 'focus',
+        entities: [Session],
+        synchronize: true,
+        logging: false,
+      });
+    } catch (e) {
+      console.log('Error connecting to DB: ', e);
+      return;
+    }
+
+    session.endTime = Date.now();
+    session.completed = completed;
+    try {
+      await connection.manager.save(session);
+    } catch (e) {
+      console.log('Error saving session: ', e);
+    }
     if (procRef.proc) {
       procRef.proc.kill();
-    }
-    if (!completed) return;
-
-    const focusedApplications = Object.entries(apps).reduce(
-      formatApplicationFocusDuration,
-      {},
-    );
-
-    const today = new Date();
-    const yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1);
-
-    let todayDb, yesterdayDb;
-    try {
-      todayDb = await readDb(today);
-      yesterdayDb = await readDb(yesterday);
-    } catch (e) {
-      // Just swallow if not found, we'll overwrite.
-    }
-
-    const entries = todayDb || [];
-    entries.push({
-      [Date.now()]: focusedApplications,
-    });
-    await writeDb(today, entries);
-
-    console.log(`You have completed ${entries.length} focus sessions!`);
-
-    if (yesterdayDb) {
-      console.log(
-        `You completed ${compareTimesFromYesterday(
-          yesterdayDb,
-        )} by now yesterday.`,
-      );
     }
   },
 };
