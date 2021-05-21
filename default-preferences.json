@@ -1,0 +1,32 @@
+{
+  "time": 25,
+  "plugins": {
+    "application-manager": {
+      "enabled": false
+    },
+    "bell": {
+      "enabled": false
+    },
+    "logger": {
+      "enabled": true
+    },
+    "rain": {
+      "enabled": false
+    },
+    "rescue-time": {
+      "enabled": false
+    },
+    "slack": {
+      "enabled": false
+    },
+    "spotify": {
+      "enabled": false
+    },
+    "tracker": {
+      "enabled": false
+    },
+    "webhooks": {
+      "enabled": false
+    }
+  }
+}
