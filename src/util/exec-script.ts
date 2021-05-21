@@ -1,5 +1,5 @@
 import { join } from 'path';
-import { ExecException } from 'child_process';
+import { exec, ExecException } from 'child_process';
 
 export const script = (plugin: string, file: string) =>
   join(__dirname, '..', 'plugins', plugin, 'applescripts', file);
@@ -7,3 +7,23 @@ export const script = (plugin: string, file: string) =>
 export const log = (error: ExecException | null): void => {
   if (error) console.error(error);
 };
+
+export const execAppleScript = (
+  plugin: string,
+  file: string,
+  configPath: string,
+): Promise<{ stdout: string; stderr: string }> =>
+  new Promise((res, rej) => {
+    exec(
+      `osascript -l JavaScript ${script(plugin, file)}`,
+      { env: { config: configPath } },
+      (err, stdout, stderr) => {
+        if (err) return rej(err);
+
+        res({
+          stderr,
+          stdout,
+        });
+      },
+    );
+  });
