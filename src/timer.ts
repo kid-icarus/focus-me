@@ -1,6 +1,8 @@
 import { EventEmitter } from 'events';
 import { setInterval, clearInterval } from 'timers';
 import { PluginWrapper } from './util/load-plugins';
+import d from 'debug';
+const debug = d('timer');
 
 type TimerState = 'STARTED' | 'STOPPED';
 
@@ -36,17 +38,22 @@ export class Timer extends EventEmitter {
   }
 
   async start(): Promise<void> {
+    debug('starting timer');
     this.emit('starting', this.until);
-    const promises = this.plugins.map(({ name, plugin, config }) =>
-      plugin.start(config).catch(e => {
-        console.error(`error starting ${name} plugin: ${e}`);
-      }),
-    );
+    const promises = this.plugins.map(({ name, plugin, config }) => {
+      debug(`starting plugin: ${name}`);
+      return plugin.start(config).catch(e => {
+        debug(`error starting ${name} plugin: ${e}`);
+      });
+    });
     try {
       await Promise.all(promises);
-    } catch (e) {}
+    } catch (e) {
+      debug('error starting timer', e);
+    }
     this.emit('started', this.until);
     this.state = 'STARTED';
+    debug('started');
 
     this.intervalId = setInterval(async () => {
       this.until -= 1;
@@ -61,27 +68,35 @@ export class Timer extends EventEmitter {
           }),
         );
       } catch (e) {
-        console.error('error ticking plugin');
+        debug('error ticking plugin', e);
       }
 
       if (!this.until && this.intervalId) {
         clearInterval(this.intervalId);
 
-        await this.stop(true);
+        try {
+          await this.stop(true);
+        } catch (e) {
+          debug('error stopping', e);
+        }
       }
     }, 1000);
   }
 
   async stop(completed: boolean): Promise<void> {
     this.emit('stopping');
-    const promises = this.plugins.map(({ name, plugin, config }) =>
-      plugin.stop(config, completed).catch(e => {
-        console.error(`error stopping ${name} plugin: ${e}`);
-      }),
-    );
+    debug('stopping timer');
+    const promises = this.plugins.map(({ name, plugin, config }) => {
+      debug(`stopping plugin: ${name}`);
+      return plugin.stop(config, completed).catch(() => {
+        debug(`error stopping ${name} plugin`);
+      });
+    });
     try {
       await Promise.all(promises);
-    } catch (e) {}
+    } catch (e) {
+      debug('error stopping timer', e);
+    }
     if (this.intervalId) clearInterval(this.intervalId);
     this.emit('stopped');
     this.state = 'STOPPED';

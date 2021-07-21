@@ -1,5 +1,7 @@
 import * as path from 'path';
 import { TimerConfig } from './load-config';
+import d from 'debug';
+const debug = d('load-plugins');
 
 export interface Plugin {
   start: (config: any) => Promise<void>;
@@ -38,7 +40,7 @@ export const loadPlugins = (config: TimerConfig): PluginWrapper[] => {
       try {
         plugin = require(pluginName);
       } catch (e) {
-        console.error(`could not load plugin ${pluginName}`);
+        d(`could not load plugin ${pluginName}`);
         throw e;
       }
     }

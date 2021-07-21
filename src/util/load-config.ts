@@ -3,6 +3,8 @@ import * as fs from 'fs';
 import { promisify } from 'util';
 import * as os from 'os';
 const readFile = promisify(fs.readFile);
+import d from 'debug';
+const debug = d('load-config');
 
 export interface TimerConfig {
   path?: string;
@@ -35,7 +37,9 @@ export const loadConfig = async (
   let config: TimerConfig;
 
   try {
+    debug(`loading config from: ${configPath}`);
     config = JSON.parse(await readFile(configPath, 'utf8'));
+    debug('config found: %o', config);
   } catch (e) {
     console.error('Error reading configuration, returning default config: ', e);
     return defaultConfig;

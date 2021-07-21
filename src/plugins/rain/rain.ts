@@ -1,6 +1,8 @@
 import { ChildProcess, exec } from 'child_process';
 import { Plugin } from '../../util/load-plugins';
 import * as path from 'path';
+import d from 'debug';
+const debug = d('plugin:rain');
 
 let proc: ChildProcess;
 
@@ -21,8 +23,9 @@ const play = async (config: PlayConfig): Promise<void> => {
         'assets',
         'rain.mp3',
       )}`,
-      () => {
+      err => {
         // swallow errors, we don't really care if this plays and we also kill the process at the end.
+        debug(err);
         res();
       },
     );

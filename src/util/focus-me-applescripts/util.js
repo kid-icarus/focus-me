@@ -9,7 +9,7 @@ function getConfig() {
     configPath ||
       `${app.pathTo('application support', {
         from: 'user domain',
-      })}/FocusMe/timerrc.json`,
+      })}/FocusMe/preferences.json`,
   );
   const contents = app.read(file);
   return JSON.parse(contents);

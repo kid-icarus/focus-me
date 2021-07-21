@@ -1,12 +1,14 @@
 import { Plugin } from '../../util/load-plugins';
 import { execAppleScript } from '../../util/exec-script';
+import d from 'debug';
+const debug = d('plugin:application-manager');
 
 const plugin: Plugin = {
   async start(config: any): Promise<void> {
     try {
       await execAppleScript('application-manager', 'close-app.js', config.path);
     } catch (e) {
-      console.error(e);
+      debug(e);
     }
   },
 
@@ -15,7 +17,7 @@ const plugin: Plugin = {
     try {
       await execAppleScript('application-manager', 'open-app.js', config.path);
     } catch (e) {
-      console.error(e);
+      debug(e);
     }
   },
 };
