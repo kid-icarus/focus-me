@@ -30,11 +30,10 @@ const install = () => {
     })
   }
 
-  if (!fs.existsSync(focusMeDir)) {
-    fs.unlinkSync(focusMeDir)
-    console.log('Symlinking compiled applescript libraries.')
-    fs.symlinkSync(join(__dirname, 'dist/util/focus-me-applescripts'), focusMeDir);
-  }
+  if (fs.existsSync(focusMeDir)) fs.unlinkSync(focusMeDir)
+
+  console.log('Symlinking compiled applescript libraries.')
+  fs.symlinkSync(join(__dirname, 'dist/util/focus-me-applescripts'), focusMeDir);
 }
 
 install();
